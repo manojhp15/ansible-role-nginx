@@ -1,0 +1,21 @@
+-
+  name: Installing NGINX
+  apt:
+    name: nginx
+    state: present
+-
+  name: Changing the nginx config file
+  lineinfile:
+    path: /etc/nginx/proxy_params
+    line: 'proxy_set_header {{ test_var }}'
+
+-
+  name: viewing contents of proxy_params
+  command: cat /etc/nginx/proxy_params
+  register: output
+
+-
+  name: Checking if configuration is changed or not
+  debug:
+    var: output.stdout
+  when: output.stdout.find('X-REVERSE') != -1
